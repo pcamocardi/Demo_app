@@ -1,0 +1,44 @@
+name: React Native Calculator Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test Calculator App
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Calculator Logic Tests
+      run: npm test -- CalculatorLogic.test.ts
+      
+    - name: Run Calculator Component Tests
+      run: npm test -- Calculator.test.tsx
+      
+    - name: Run All Tests with Coverage
+      run: npm test -- --coverage --watchAll=false
+      
+    - name: Upload test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results
+        path: |
+          coverage/
+          __tests__/
