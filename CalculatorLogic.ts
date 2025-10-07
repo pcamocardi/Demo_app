@@ -100,6 +100,11 @@ export class CalculatorAPI {
     return Math.E;
   }
   
+  // Exponential function
+  static exp(n: number): number {
+    return Math.exp(n);
+  }
+  
   // Number formatting
   static formatNumber(num: number): string {
     if (typeof num !== 'number' || isNaN(num)) {
@@ -161,6 +166,210 @@ export class CalculatorAPI {
   static createExpression(firstNumber: number, operation: string, secondNumber: number): string {
     const symbol = this.getOperationSymbol(operation);
     return `${firstNumber} ${symbol} ${secondNumber}`;
+  }
+
+  // Expression Parser and Evaluator for Parentheses Support
+  static parseExpression(expression: string): number {
+    try {
+      // Clean the expression
+      let cleaned = expression.replace(/\s+/g, '');
+      
+      // Validate parentheses
+      if (!this.validateParentheses(cleaned)) {
+        throw new Error('Mismatched parentheses');
+      }
+      
+      // Handle implicit multiplication (e.g., 2(3+4) -> 2*(3+4))
+      cleaned = this.addImplicitMultiplication(cleaned);
+      
+      // Parse and evaluate using recursive descent
+      const result = this.evaluateExpression(cleaned);
+      
+      if (isNaN(result) || !isFinite(result)) {
+        throw new Error('Invalid expression result');
+      }
+      
+      return result;
+    } catch (error) {
+      throw new Error(`Expression Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  // Validate parentheses matching
+  static validateParentheses(expression: string): boolean {
+    let count = 0;
+    for (const char of expression) {
+      if (char === '(') count++;
+      if (char === ')') count--;
+      if (count < 0) return false; // More closing than opening
+    }
+    return count === 0; // Must be balanced
+  }
+
+  // Add implicit multiplication for expressions like 2(3+4) or (2+3)(4+5)
+  static addImplicitMultiplication(expression: string): string {
+    let result = expression;
+    
+    // Add multiplication between number and opening parenthesis: 2( -> 2*(
+    result = result.replace(/(\d)\(/g, '$1*(');
+    
+    // Add multiplication between closing and opening parenthesis: )( -> )*(
+    result = result.replace(/\)\(/g, ')*(');
+    
+    // Add multiplication between closing parenthesis and number: )2 -> )*2
+    result = result.replace(/\)(\d)/g, ')*$1');
+    
+    // Add multiplication between number and number separated by spaces: 2 3 -> 2*3
+    result = result.replace(/(\d)\s+(\d)/g, '$1*$2');
+    
+    return result;
+  }
+
+  // Recursive descent parser for mathematical expressions
+  static evaluateExpression(expression: string): number {
+    let index = 0;
+    
+    const parseExpression = (): number => {
+      return parseAddition();
+    };
+    
+    const parseAddition = (): number => {
+      let left = parseMultiplication();
+      
+      while (index < expression.length) {
+        const operator = expression[index];
+        if (operator === '+' || operator === '-') {
+          index++;
+          const right = parseMultiplication();
+          left = operator === '+' ? left + right : left - right;
+        } else {
+          break;
+        }
+      }
+      
+      return left;
+    };
+    
+    const parseMultiplication = (): number => {
+      let left = parseExponentiation();
+      
+      while (index < expression.length) {
+        const operator = expression[index];
+        if (operator === '*' || operator === '/') {
+          index++;
+          const right = parseExponentiation();
+          if (operator === '*') {
+            left = left * right;
+          } else {
+            if (right === 0) {
+              throw new Error('Division by zero');
+            }
+            left = left / right;
+          }
+        } else {
+          break;
+        }
+      }
+      
+      return left;
+    };
+    
+    const parseExponentiation = (): number => {
+      let left = parsePrimary();
+      
+      while (index < expression.length && expression[index] === '^') {
+        index++;
+        const right = parsePrimary();
+        left = Math.pow(left, right);
+      }
+      
+      return left;
+    };
+    
+    const parsePrimary = (): number => {
+      if (index >= expression.length) {
+        throw new Error('Unexpected end of expression');
+      }
+      
+      const char = expression[index];
+      
+      if (char === '(') {
+        index++; // consume '('
+        const result = parseExpression();
+        if (index >= expression.length || expression[index] !== ')') {
+          throw new Error('Missing closing parenthesis');
+        }
+        index++; // consume ')'
+        return result;
+      }
+      
+      if (char === '-') {
+        index++; // consume '-'
+        return -parsePrimary();
+      }
+      
+      if (char === '+') {
+        index++; // consume '+'
+        return parsePrimary();
+      }
+      
+      if (/\d/.test(char)) {
+        return parseNumber();
+      }
+      
+      throw new Error(`Unexpected character: ${char}`);
+    };
+    
+    const parseNumber = (): number => {
+      let numStr = '';
+      
+      while (index < expression.length && (/\d/.test(expression[index]) || expression[index] === '.')) {
+        numStr += expression[index];
+        index++;
+      }
+      
+      const num = parseFloat(numStr);
+      if (isNaN(num)) {
+        throw new Error(`Invalid number: ${numStr}`);
+      }
+      
+      return num;
+    };
+    
+    const result = parseExpression();
+    
+    if (index < expression.length) {
+      throw new Error(`Unexpected character at position ${index}: ${expression[index]}`);
+    }
+    
+    return result;
+  }
+
+  // Check if an expression is complete and ready for evaluation
+  static isExpressionComplete(expression: string): boolean {
+    const cleaned = expression.replace(/\s+/g, '');
+    
+    // Check for balanced parentheses
+    if (!this.validateParentheses(cleaned)) {
+      return false;
+    }
+    
+    // Check if expression ends with a number or closing parenthesis
+    const lastChar = cleaned[cleaned.length - 1];
+    return /\d/.test(lastChar) || lastChar === ')';
+  }
+
+  // Get the current expression with proper formatting for display
+  static formatExpression(expression: string): string {
+    let formatted = expression.replace(/\s+/g, '');
+    
+    // Add implicit multiplication for display
+    formatted = this.addImplicitMultiplication(formatted);
+    
+    // Add spaces around operators for better readability
+    formatted = formatted.replace(/([+\-*/^])/g, ' $1 ');
+    
+    return formatted.trim();
   }
 }
 

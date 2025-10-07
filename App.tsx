@@ -20,23 +20,23 @@ function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? '#1C1C1E' : '#F2F2F7',
+    backgroundColor: '#1C1C1E', // Force dark background
     flex: 1,
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle="light-content"
         backgroundColor={backgroundStyle.backgroundColor}
       />
       
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: isDarkMode ? '#FFFFFF' : '#000000' }]}>
-          🧮 Advanced Calculator
+      <View style={[styles.header, { backgroundColor: '#2C2C2E' }]}>
+        <Text style={[styles.title, { color: '#FFFFFF' }]}>
+          🧮 Calculator
         </Text>
-        <Text style={[styles.subtitle, { color: isDarkMode ? '#8E8E93' : '#6D6D70' }]}>
-          iOS Demo App with Full Mathematical Functions
+        <Text style={[styles.subtitle, { color: '#8E8E93' }]}>
+          Developed by Pablo using AI
         </Text>
       </View>
       
@@ -49,13 +49,21 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 20,
     paddingTop: 10,
-    paddingBottom: 5,
+    paddingBottom: 10,
     alignItems: 'center',
+    marginHorizontal: 8,
+    marginTop: 8,
+    borderRadius: 12,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   title: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '700',
-    marginBottom: 4,
+    marginBottom: 2,
     textAlign: 'center',
   },
   subtitle: {
