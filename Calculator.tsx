@@ -3,16 +3,12 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   Alert,
   StyleSheet,
-  useColorScheme,
 } from 'react-native';
-import { CalculatorAPI, HistoryItem } from './CalculatorLogic';
+import { CalculatorAPI } from './CalculatorLogic';
 
 export default function Calculator(): React.JSX.Element {
-  // Force dark theme
-  const isDarkMode = true;
   const [inputValue, setInputValue] = useState('0');
   const [operation, setOperation] = useState('');
   const [firstNumber, setFirstNumber] = useState<number | null>(null);
@@ -255,38 +251,38 @@ export default function Calculator(): React.JSX.Element {
 
     try {
       let result: number;
-      let expression: string;
+      let operationExpression: string;
       
       switch (selectedOperation) {
         case 'add':
           result = CalculatorAPI.add(firstNumber, secondNumber);
-          expression = `${firstNumber} + ${secondNumber}`;
+          operationExpression = `${firstNumber} + ${secondNumber}`;
           break;
         case 'subtract':
           result = CalculatorAPI.subtract(firstNumber, secondNumber);
-          expression = `${firstNumber} - ${secondNumber}`;
+          operationExpression = `${firstNumber} - ${secondNumber}`;
           break;
         case 'multiply':
           result = CalculatorAPI.multiply(firstNumber, secondNumber);
-          expression = `${firstNumber} × ${secondNumber}`;
+          operationExpression = `${firstNumber} × ${secondNumber}`;
           break;
         case 'divide':
           result = CalculatorAPI.divide(firstNumber, secondNumber);
-          expression = `${firstNumber} ÷ ${secondNumber}`;
+          operationExpression = `${firstNumber} ÷ ${secondNumber}`;
           break;
         case 'power':
           result = CalculatorAPI.power(firstNumber, secondNumber);
-          expression = `${firstNumber} ^ ${secondNumber}`;
+          operationExpression = `${firstNumber} ^ ${secondNumber}`;
           break;
         case 'exp':
           result = firstNumber * CalculatorAPI.power(10, secondNumber);
-          expression = `${firstNumber} * 10^${secondNumber}`;
+          operationExpression = `${firstNumber} * 10^${secondNumber}`;
           break;
         default:
           throw new Error('Unknown operation');
       }
       
-      updateDisplay(result, `${expression} =`);
+      updateDisplay(result, `${operationExpression} =`);
       
       // Reset for next calculation
       setFirstNumber(null);
@@ -343,48 +339,48 @@ export default function Calculator(): React.JSX.Element {
     
     try {
       let result: number;
-      let expression: string;
+      let operationExpression: string;
       
       switch (op) {
         case 'sqrt':
           result = CalculatorAPI.sqrt(num);
-          expression = `√${num}`;
+          operationExpression = `√${num}`;
           break;
         case 'square':
           result = CalculatorAPI.square(num);
-          expression = `${num}²`;
+          operationExpression = `${num}²`;
           break;
         case 'cube':
           result = CalculatorAPI.cube(num);
-          expression = `${num}³`;
+          operationExpression = `${num}³`;
           break;
         case 'factorial':
           result = CalculatorAPI.factorial(num);
-          expression = `${num}!`;
+          operationExpression = `${num}!`;
           break;
         case 'abs':
           result = CalculatorAPI.abs(num);
-          expression = `|${num}|`;
+          operationExpression = `|${num}|`;
           break;
         case 'sin':
           result = CalculatorAPI.sin(num);
-          expression = `sin(${num})`;
+          operationExpression = `sin(${num})`;
           break;
         case 'cos':
           result = CalculatorAPI.cos(num);
-          expression = `cos(${num})`;
+          operationExpression = `cos(${num})`;
           break;
         case 'tan':
           result = CalculatorAPI.tan(num);
-          expression = `tan(${num})`;
+          operationExpression = `tan(${num})`;
           break;
         case 'log':
           result = CalculatorAPI.log(num);
-          expression = `ln(${num})`;
+          operationExpression = `ln(${num})`;
           break;
         case 'log10':
           result = CalculatorAPI.log10(num);
-          expression = `log₁₀(${num})`;
+          operationExpression = `log₁₀(${num})`;
           break;
         case 'exp':
           // This should not be handled as a single operation
@@ -393,7 +389,7 @@ export default function Calculator(): React.JSX.Element {
           throw new Error('Unknown operation');
       }
       
-      updateDisplay(result, expression);
+      updateDisplay(result, operationExpression);
       
       // Reset calculator state for next calculation
       setFirstNumber(null);
@@ -554,7 +550,7 @@ export default function Calculator(): React.JSX.Element {
             <Text style={styles.specialButtonText}>|x|</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.specialButton, { backgroundColor: colors.destructive }]} onPress={clearCalculator}>
-            <Text style={[styles.specialButtonText, { fontWeight: 'bold', fontStyle: 'normal' }]}>C</Text>
+            <Text style={[styles.specialButtonText, styles.boldText, styles.normalStyle]}>C</Text>
           </TouchableOpacity>
         </View>
         
@@ -670,7 +666,7 @@ export default function Calculator(): React.JSX.Element {
             <Text style={styles.basicButtonText}>.</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.basicButton, { backgroundColor: colors.success }]} onPress={handleEquals}>
-            <Text style={[styles.basicButtonText, { fontWeight: 'bold' }]}>=</Text>
+            <Text style={[styles.basicButtonText, styles.boldText]}>=</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -772,5 +768,11 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 22,
     fontWeight: '600',
+  },
+  boldText: {
+    fontWeight: 'bold',
+  },
+  normalStyle: {
+    fontStyle: 'normal',
   },
 });

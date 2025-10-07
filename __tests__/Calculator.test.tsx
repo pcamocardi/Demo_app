@@ -16,10 +16,10 @@ describe('Calculator Component', () => {
   });
 
   test('renders correctly', () => {
-    const { getByText } = render(<Calculator />);
+    const { getByText, getByTestId } = render(<Calculator />);
     
     // Check for key calculator elements in the new layout
-    expect(getByText('0')).toBeTruthy(); // Display
+    expect(getByTestId('display-result')).toBeTruthy(); // Display
     expect(getByText('7')).toBeTruthy(); // Number button
     expect(getByText('8')).toBeTruthy(); // Number button
     expect(getByText('9')).toBeTruthy(); // Number button
@@ -38,9 +38,9 @@ describe('Calculator Component', () => {
   });
 
   test('displays initial state correctly', () => {
-    const { getByText } = render(<Calculator />);
+    const { getByTestId } = render(<Calculator />);
     
-    expect(getByText('0')).toBeTruthy(); // Display
+    expect(getByTestId('display-result')).toHaveTextContent('0'); // Display
   });
 
   describe('Basic Operations', () => {
@@ -166,15 +166,15 @@ describe('Calculator Component', () => {
       fireEvent.press(getByText('|x|'));
       
       await waitFor(() => {
-        expect(getByText('|-7|')).toBeTruthy();
+        expect(getByText('|7|')).toBeTruthy();
       });
     });
 
     test('should show error for factorial of negative number', async () => {
       const { getByText } = render(<Calculator />);
       
-      fireEvent.press(getByText('-'));
       fireEvent.press(getByText('5'));
+      fireEvent.press(getByText('+/-')); // Make it negative
       fireEvent.press(getByText('n!'));
       
       await waitFor(() => {
@@ -185,8 +185,8 @@ describe('Calculator Component', () => {
     test('should show error for square root of negative number', async () => {
       const { getByText } = render(<Calculator />);
       
-      fireEvent.press(getByText('-'));
       fireEvent.press(getByText('4'));
+      fireEvent.press(getByText('+/-')); // Make it negative
       fireEvent.press(getByText('√'));
       
       await waitFor(() => {
@@ -210,9 +210,9 @@ describe('Calculator Component', () => {
 
   describe('Trigonometric Functions', () => {
     test('should perform sine function correctly', async () => {
-      const { getByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      fireEvent.press(getByText('0'));
+      fireEvent.press(getAllByText('0')[1]); // Use the 0 button, not the display
       fireEvent.press(getByText('sin'));
       
       await waitFor(() => {
@@ -221,9 +221,9 @@ describe('Calculator Component', () => {
     });
 
     test('should perform cosine function correctly', async () => {
-      const { getByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      fireEvent.press(getByText('0'));
+      fireEvent.press(getAllByText('0')[1]); // Use the 0 button, not the display
       fireEvent.press(getByText('cos'));
       
       await waitFor(() => {
@@ -232,9 +232,9 @@ describe('Calculator Component', () => {
     });
 
     test('should perform tangent function correctly', async () => {
-      const { getByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      fireEvent.press(getByText('0'));
+      fireEvent.press(getAllByText('0')[1]); // Use the 0 button, not the display
       fireEvent.press(getByText('tan'));
       
       await waitFor(() => {
@@ -268,9 +268,9 @@ describe('Calculator Component', () => {
     });
 
     test('should show error for logarithm of non-positive numbers', async () => {
-      const { getByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      fireEvent.press(getByText('0'));
+      fireEvent.press(getAllByText('0')[1]); // Use the 0 button, not the display
       fireEvent.press(getByText('ln'));
       
       await waitFor(() => {
@@ -465,28 +465,28 @@ describe('Calculator Component', () => {
     });
 
     test('should toggle sign back to positive', async () => {
-      const { getByText } = render(<Calculator />);
+      const { getByText, getByTestId } = render(<Calculator />);
       
       fireEvent.press(getByText('5'));
       fireEvent.press(getByText('+/-'));
       fireEvent.press(getByText('+/-'));
       
       await waitFor(() => {
-        expect(getByText('5')).toBeTruthy();
+        expect(getByTestId('display-result')).toHaveTextContent('5');
       });
     });
   });
 
   describe('Clear Function', () => {
     test('should clear calculator state', () => {
-      const { getByText } = render(<Calculator />);
+      const { getByText, getByTestId } = render(<Calculator />);
       
       fireEvent.press(getByText('5'));
       fireEvent.press(getByText('+'));
       fireEvent.press(getByText('3'));
       fireEvent.press(getByText('C'));
       
-      expect(getByText('0')).toBeTruthy();
+      expect(getByTestId('display-result')).toHaveTextContent('0');
     });
   });
 

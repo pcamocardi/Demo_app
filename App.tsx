@@ -12,12 +12,10 @@ import {
   StyleSheet,
   Text,
   View,
-  useColorScheme,
 } from 'react-native';
 import Calculator from './Calculator';
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
     backgroundColor: '#1C1C1E', // Force dark background
@@ -31,11 +29,11 @@ function App(): React.JSX.Element {
         backgroundColor={backgroundStyle.backgroundColor}
       />
       
-      <View style={[styles.header, { backgroundColor: '#2C2C2E' }]}>
-        <Text style={[styles.title, { color: '#FFFFFF' }]}>
+      <View style={styles.header}>
+        <Text style={styles.title}>
           🧮 Calculator
         </Text>
-        <Text style={[styles.subtitle, { color: '#8E8E93' }]}>
+        <Text style={styles.subtitle}>
           Developed by Pablo using AI
         </Text>
       </View>
@@ -54,6 +52,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     marginTop: 8,
     borderRadius: 12,
+    backgroundColor: '#2C2C2E',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -65,11 +64,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: 2,
     textAlign: 'center',
+    color: '#FFFFFF',
   },
   subtitle: {
     fontSize: 14,
     fontWeight: '400',
     textAlign: 'center',
+    color: '#8E8E93',
   },
 });
 
