@@ -218,4 +218,52 @@ describe('CalculatorAPI', () => {
       expect(CalculatorAPI.multiply(small, 2)).toBeCloseTo(2e-10);
     });
   });
+
+  describe('Unified Input System Support', () => {
+    test('isValidNumber should validate number inputs correctly', () => {
+      expect(CalculatorAPI.isValidNumber('5')).toBe(true);
+      expect(CalculatorAPI.isValidNumber('3.14')).toBe(true);
+      expect(CalculatorAPI.isValidNumber('-2.5')).toBe(true);
+      expect(CalculatorAPI.isValidNumber('0')).toBe(true);
+      expect(CalculatorAPI.isValidNumber('1e5')).toBe(true);
+      
+      expect(CalculatorAPI.isValidNumber('')).toBe(false);
+      expect(CalculatorAPI.isValidNumber('.')).toBe(false);
+      expect(CalculatorAPI.isValidNumber('abc')).toBe(false);
+      expect(CalculatorAPI.isValidNumber('5.3.2')).toBe(false);
+      expect(CalculatorAPI.isValidNumber('infinity')).toBe(false);
+    });
+
+    test('parseInput should parse valid numbers correctly', () => {
+      expect(CalculatorAPI.parseInput('5')).toBe(5);
+      expect(CalculatorAPI.parseInput('3.14')).toBe(3.14);
+      expect(CalculatorAPI.parseInput('-2.5')).toBe(-2.5);
+      expect(CalculatorAPI.parseInput('0')).toBe(0);
+      expect(CalculatorAPI.parseInput('1e5')).toBe(100000);
+    });
+
+    test('parseInput should throw error for invalid inputs', () => {
+      expect(() => CalculatorAPI.parseInput('')).toThrow('Invalid number input');
+      expect(() => CalculatorAPI.parseInput('.')).toThrow('Invalid number input');
+      expect(() => CalculatorAPI.parseInput('abc')).toThrow('Invalid number input');
+      expect(() => CalculatorAPI.parseInput('5.3.2')).toThrow('Invalid number input');
+    });
+
+    test('getOperationSymbol should return correct symbols', () => {
+      expect(CalculatorAPI.getOperationSymbol('add')).toBe('+');
+      expect(CalculatorAPI.getOperationSymbol('subtract')).toBe('-');
+      expect(CalculatorAPI.getOperationSymbol('multiply')).toBe('×');
+      expect(CalculatorAPI.getOperationSymbol('divide')).toBe('÷');
+      expect(CalculatorAPI.getOperationSymbol('power')).toBe('^');
+      expect(CalculatorAPI.getOperationSymbol('unknown')).toBe('unknown');
+    });
+
+    test('createExpression should create proper expression strings', () => {
+      expect(CalculatorAPI.createExpression(5, 'add', 3)).toBe('5 + 3');
+      expect(CalculatorAPI.createExpression(10, 'subtract', 4)).toBe('10 - 4');
+      expect(CalculatorAPI.createExpression(2, 'multiply', 6)).toBe('2 × 6');
+      expect(CalculatorAPI.createExpression(15, 'divide', 3)).toBe('15 ÷ 3');
+      expect(CalculatorAPI.createExpression(2, 'power', 3)).toBe('2 ^ 3');
+    });
+  });
 });

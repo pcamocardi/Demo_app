@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, getAllByText } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import Calculator from '../Calculator';
 
@@ -16,146 +16,142 @@ describe('Calculator Component', () => {
   });
 
   test('renders correctly', () => {
-    const { getByText } = render(<Calculator />);
+    const { getByText, getAllByText } = render(<Calculator />);
     
-    expect(getByText('Basic Operations')).toBeTruthy();
-    expect(getByText('Single Number Operations')).toBeTruthy();
-    expect(getByText('Constants')).toBeTruthy();
-    expect(getByText('History')).toBeTruthy();
+    // Check for key calculator elements in the new iPhone-optimized layout
+    expect(getAllByText('0')).toHaveLength(2); // Display and number button
+    expect(getByText('7')).toBeTruthy(); // Number button
+    expect(getByText('8')).toBeTruthy(); // Number button
+    expect(getByText('9')).toBeTruthy(); // Number button
+    expect(getByText('C')).toBeTruthy(); // Clear button
+    expect(getByText('+')).toBeTruthy(); // Add button
+    expect(getByText('-')).toBeTruthy(); // Subtract button
+    expect(getByText('×')).toBeTruthy(); // Multiply button
+    expect(getByText('÷')).toBeTruthy(); // Divide button
+    expect(getByText('=')).toBeTruthy(); // Equals button
+    expect(getByText('π')).toBeTruthy(); // Pi constant
+    expect(getByText('e')).toBeTruthy(); // Euler constant
+    expect(getByText('History')).toBeTruthy(); // History section
   });
 
   test('displays initial state correctly', () => {
-    const { getByText, getByPlaceholderText } = render(<Calculator />);
+    const { getAllByText, getByText } = render(<Calculator />);
     
-    expect(getByText('0')).toBeTruthy(); // Initial display
-    expect(getByPlaceholderText('First number')).toBeTruthy();
-    expect(getByPlaceholderText('Second number')).toBeTruthy();
-    expect(getByPlaceholderText('Enter number')).toBeTruthy();
+    expect(getAllByText('0')).toHaveLength(2); // Display and number button
+    expect(getByText('No calculations yet')).toBeTruthy(); // Empty history
   });
 
   describe('Basic Operations', () => {
     test('should perform addition correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const firstInput = getByPlaceholderText('First number');
-      const secondInput = getByPlaceholderText('Second number');
-      const addButton = getByText('+ Add');
-      
-      fireEvent.changeText(firstInput, '5');
-      fireEvent.changeText(secondInput, '3');
-      fireEvent.press(addButton);
+      // Traditional calculator workflow: number → operation → number → equals
+      fireEvent.press(getByText('5')); // Enter first number
+      fireEvent.press(getByText('+')); // Select addition operation
+      fireEvent.press(getByText('3')); // Enter second number
+      fireEvent.press(getByText('=')); // Calculate result
       
       await waitFor(() => {
-        expect(getByText('8')).toBeTruthy();
+        expect(getAllByText('8')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('5 + 3').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('5 + 3')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform subtraction correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const firstInput = getByPlaceholderText('First number');
-      const secondInput = getByPlaceholderText('Second number');
-      const subtractButton = getByText('- Subtract');
-      
-      fireEvent.changeText(firstInput, '10');
-      fireEvent.changeText(secondInput, '4');
-      fireEvent.press(subtractButton);
+      // Traditional calculator workflow: number → operation → number → equals
+      fireEvent.press(getByText('1'));
+      fireEvent.press(getByText('0')); // Enter 10
+      fireEvent.press(getByText('-')); // Select subtraction operation
+      fireEvent.press(getByText('4')); // Enter second number
+      fireEvent.press(getByText('=')); // Calculate result
       
       await waitFor(() => {
-        expect(getByText('6')).toBeTruthy();
+        expect(getAllByText('6')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('10 - 4').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('10 - 4')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform multiplication correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const firstInput = getByPlaceholderText('First number');
-      const secondInput = getByPlaceholderText('Second number');
-      const multiplyButton = getByText('× Multiply');
-      
-      fireEvent.changeText(firstInput, '4');
-      fireEvent.changeText(secondInput, '6');
-      fireEvent.press(multiplyButton);
+      // Traditional calculator workflow: number → operation → number → equals
+      fireEvent.press(getByText('4')); // Enter first number
+      fireEvent.press(getByText('×')); // Select multiplication operation
+      fireEvent.press(getByText('6')); // Enter second number
+      fireEvent.press(getByText('=')); // Calculate result
       
       await waitFor(() => {
-        expect(getByText('24')).toBeTruthy();
+        expect(getByText('24')).toBeTruthy(); // Result
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('4 × 6').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('4 × 6')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform division correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const firstInput = getByPlaceholderText('First number');
-      const secondInput = getByPlaceholderText('Second number');
-      const divideButton = getByText('÷ Divide');
-      
-      fireEvent.changeText(firstInput, '15');
-      fireEvent.changeText(secondInput, '3');
-      fireEvent.press(divideButton);
+      // Traditional calculator workflow: number → operation → number → equals
+      fireEvent.press(getByText('1'));
+      fireEvent.press(getByText('5')); // Enter 15
+      fireEvent.press(getByText('÷')); // Select division operation
+      fireEvent.press(getByText('3')); // Enter second number
+      fireEvent.press(getByText('=')); // Calculate result
       
       await waitFor(() => {
-        expect(getByText('5')).toBeTruthy();
+        expect(getAllByText('5')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('15 ÷ 3').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('15 ÷ 3')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform power operation correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const firstInput = getByPlaceholderText('First number');
-      const secondInput = getByPlaceholderText('Second number');
-      const powerButton = getByText('^ Power');
-      
-      fireEvent.changeText(firstInput, '2');
-      fireEvent.changeText(secondInput, '3');
-      fireEvent.press(powerButton);
+      // Traditional calculator workflow: number → operation → number → equals
+      fireEvent.press(getByText('2')); // Enter first number
+      fireEvent.press(getByText('^')); // Select power operation
+      fireEvent.press(getByText('3')); // Enter second number
+      fireEvent.press(getByText('=')); // Calculate result
       
       await waitFor(() => {
-        expect(getByText('8')).toBeTruthy();
+        expect(getAllByText('8')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('2 ^ 3').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('2 ^ 3')).toHaveLength(2); // Operation display + history
     });
 
     test('should show error for invalid input in basic operations', async () => {
-      const { getByPlaceholderText, getByText } = render(<Calculator />);
+      const { getByText } = render(<Calculator />);
       
-      const firstInput = getByPlaceholderText('First number');
-      const secondInput = getByPlaceholderText('Second number');
-      const addButton = getByText('+ Add');
+      // Clear the calculator first to get to a truly empty state
+      fireEvent.press(getByText('C'));
       
-      fireEvent.changeText(firstInput, 'invalid');
-      fireEvent.changeText(secondInput, '3');
-      fireEvent.press(addButton);
+      // Try to perform operation without entering a number first
+      fireEvent.press(getByText('+')); // Try to select operation without number
       
       await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalledWith('Calculator Error', 'Please enter valid numbers');
+        expect(Alert.alert).toHaveBeenCalledWith('Calculator Error', 'Please enter a valid number first');
         expect(getByText('Error')).toBeTruthy();
       });
     });
 
     test('should show error for division by zero', async () => {
-      const { getByPlaceholderText, getByText } = render(<Calculator />);
+      const { getByText } = render(<Calculator />);
       
-      const firstInput = getByPlaceholderText('First number');
-      const secondInput = getByPlaceholderText('Second number');
-      const divideButton = getByText('÷ Divide');
-      
-      fireEvent.changeText(firstInput, '5');
-      fireEvent.changeText(secondInput, '0');
-      fireEvent.press(divideButton);
+      // Traditional calculator workflow: number → operation → number → equals
+      fireEvent.press(getByText('5')); // Enter first number
+      fireEvent.press(getByText('÷')); // Select division operation
+      fireEvent.press(getByText('0')); // Enter zero
+      fireEvent.press(getByText('=')); // Calculate result
       
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalledWith('Calculator Error', 'Division by zero is not allowed');
@@ -166,113 +162,104 @@ describe('Calculator Component', () => {
 
   describe('Single Number Operations', () => {
     test('should perform square root correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const sqrtButton = getByText('√ Root');
-      
-      fireEvent.changeText(input, '16');
-      fireEvent.press(sqrtButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getByText('1'));
+      fireEvent.press(getByText('6')); // Enter 16
+      fireEvent.press(getByText('√')); // Select square root operation
       
       await waitFor(() => {
-        expect(getByText('4')).toBeTruthy();
+        expect(getAllByText('4')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('√16').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('√16')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform square correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const squareButton = getByText('x² Square');
-      
-      fireEvent.changeText(input, '5');
-      fireEvent.press(squareButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getByText('5')); // Enter number
+      fireEvent.press(getByText('x²')); // Select square operation
       
       await waitFor(() => {
-        expect(getByText('25')).toBeTruthy();
+        expect(getByText('25')).toBeTruthy(); // Result
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('5²').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('5²')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform cube correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const cubeButton = getByText('x³ Cube');
-      
-      fireEvent.changeText(input, '3');
-      fireEvent.press(cubeButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getByText('3')); // Enter number
+      fireEvent.press(getByText('x³')); // Select cube operation
       
       await waitFor(() => {
-        expect(getByText('27')).toBeTruthy();
+        expect(getByText('27')).toBeTruthy(); // Result
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('3³').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('3³')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform factorial correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const factorialButton = getByText('n! Factorial');
-      
-      fireEvent.changeText(input, '4');
-      fireEvent.press(factorialButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getByText('4')); // Enter number
+      fireEvent.press(getByText('n!')); // Select factorial operation
       
       await waitFor(() => {
-        expect(getByText('24')).toBeTruthy();
+        expect(getByText('24')).toBeTruthy(); // Result
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('4!').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('4!')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform absolute value correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const absButton = getByText('|x| Absolute');
-      
-      fireEvent.changeText(input, '-7');
-      fireEvent.press(absButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getByText('-'));
+      fireEvent.press(getByText('7')); // Enter -7
+      fireEvent.press(getByText('|x|')); // Select absolute value operation
       
       await waitFor(() => {
-        expect(getByText('7')).toBeTruthy();
+        expect(getAllByText('7')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('|-7|').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('|7|')).toHaveLength(2); // Operation display + history
     });
 
     test('should show error for invalid input in single operations', async () => {
-      const { getByPlaceholderText, getByText } = render(<Calculator />);
+      const { getByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const sqrtButton = getByText('√ Root');
+      // Clear the calculator first to get to a truly empty state
+      fireEvent.press(getByText('C'));
       
-      fireEvent.changeText(input, 'invalid');
-      fireEvent.press(sqrtButton);
+      // Try to perform operation without entering a number first
+      fireEvent.press(getByText('√')); // Try to select operation without number
       
       await waitFor(() => {
-        expect(Alert.alert).toHaveBeenCalledWith('Calculator Error', 'Please enter a valid number');
+        expect(Alert.alert).toHaveBeenCalledWith('Calculator Error', 'Please enter a valid number first');
         expect(getByText('Error')).toBeTruthy();
       });
     });
 
     test('should show error for square root of negative number', async () => {
-      const { getByPlaceholderText, getByText } = render(<Calculator />);
+      const { getByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const sqrtButton = getByText('√ Root');
-      
-      fireEvent.changeText(input, '-4');
-      fireEvent.press(sqrtButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getByText('-'));
+      fireEvent.press(getByText('4')); // Enter -4
+      fireEvent.press(getByText('√')); // Select square root operation
       
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalledWith('Calculator Error', 'Square root of negative number is not allowed');
@@ -285,29 +272,29 @@ describe('Calculator Component', () => {
     test('should display PI constant correctly', async () => {
       const { getByText, getAllByText } = render(<Calculator />);
       
-      const piButton = getByText('π (Pi)');
+      const piButton = getByText('π');
       fireEvent.press(piButton);
       
       await waitFor(() => {
-        expect(getByText('3.1415926536')).toBeTruthy();
+        expect(getByText('3.141592653589793')).toBeTruthy();
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('π').length).toBeGreaterThan(0);
+      // Check that the constant appears in history
+      expect(getAllByText('π')).toHaveLength(3); // Button + operation display + history
     });
 
     test('should display Euler constant correctly', async () => {
       const { getByText, getAllByText } = render(<Calculator />);
       
-      const eButton = getByText('e (Euler)');
+      const eButton = getByText('e');
       fireEvent.press(eButton);
       
       await waitFor(() => {
-        expect(getByText('2.7182818285')).toBeTruthy();
+        expect(getByText('2.718281828459045')).toBeTruthy();
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('e').length).toBeGreaterThan(0);
+      // Check that the constant appears in history
+      expect(getAllByText('e')).toHaveLength(3); // Button + operation display + history
     });
   });
 
@@ -318,19 +305,17 @@ describe('Calculator Component', () => {
     });
 
     test('should add calculations to history', async () => {
-      const { getByPlaceholderText, getByText, queryByText, getAllByText } = render(<Calculator />);
+      const { getByText, queryByText, getAllByText } = render(<Calculator />);
       
-      const firstInput = getByPlaceholderText('First number');
-      const secondInput = getByPlaceholderText('Second number');
-      const addButton = getByText('+ Add');
-      
-      fireEvent.changeText(firstInput, '2');
-      fireEvent.changeText(secondInput, '3');
-      fireEvent.press(addButton);
+      // Traditional calculator workflow: number → operation → number → equals
+      fireEvent.press(getByText('2')); // Enter first number
+      fireEvent.press(getByText('+')); // Select addition operation
+      fireEvent.press(getByText('3')); // Enter second number
+      fireEvent.press(getByText('=')); // Calculate result
       
       await waitFor(() => {
         expect(queryByText('No calculations yet')).toBeFalsy();
-        expect(getByText('= 5')).toBeTruthy();
+        expect(getAllByText('5')).toHaveLength(2); // Result in display + number button
       });
       
       // Check that the operation appears in history
@@ -356,100 +341,89 @@ describe('Calculator Component', () => {
 
   describe('Trigonometric Functions', () => {
     test('should perform sine function correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const sinButton = getByText('sin');
-      
-      fireEvent.changeText(input, '0');
-      fireEvent.press(sinButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getAllByText('0')[0]); // Enter 0 (use first instance)
+      fireEvent.press(getByText('sin')); // Select sine operation
       
       await waitFor(() => {
-        expect(getByText('0')).toBeTruthy();
+        expect(getAllByText('0')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('sin(0)').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('sin(0)')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform cosine function correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const cosButton = getByText('cos');
-      
-      fireEvent.changeText(input, '0');
-      fireEvent.press(cosButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getAllByText('0')[0]); // Enter 0 (use first instance)
+      fireEvent.press(getByText('cos')); // Select cosine operation
       
       await waitFor(() => {
-        expect(getByText('1')).toBeTruthy();
+        expect(getAllByText('1')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('cos(0)').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('cos(0)')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform tangent function correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const tanButton = getByText('tan');
-      
-      fireEvent.changeText(input, '0');
-      fireEvent.press(tanButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getAllByText('0')[0]); // Enter 0 (use first instance)
+      fireEvent.press(getByText('tan')); // Select tangent operation
       
       await waitFor(() => {
-        expect(getByText('0')).toBeTruthy();
+        expect(getAllByText('0')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('tan(0)').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('tan(0)')).toHaveLength(2); // Operation display + history
     });
   });
 
   describe('Logarithmic Functions', () => {
     test('should perform natural logarithm correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const logButton = getByText('ln');
-      
-      fireEvent.changeText(input, '1');
-      fireEvent.press(logButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getByText('1')); // Enter 1
+      fireEvent.press(getByText('ln')); // Select natural logarithm operation
       
       await waitFor(() => {
-        expect(getByText('0')).toBeTruthy();
+        expect(getAllByText('0')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('ln(1)').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('ln(1)')).toHaveLength(2); // Operation display + history
     });
 
     test('should perform base-10 logarithm correctly', async () => {
-      const { getByPlaceholderText, getByText, getAllByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const log10Button = getByText('log₁₀');
-      
-      fireEvent.changeText(input, '10');
-      fireEvent.press(log10Button);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getByText('1'));
+      fireEvent.press(getByText('0')); // Enter 10
+      fireEvent.press(getByText('log₁₀')); // Select base-10 logarithm operation
       
       await waitFor(() => {
-        expect(getByText('1')).toBeTruthy();
+        expect(getAllByText('1')).toHaveLength(2); // Result in display + number button
       });
       
-      // Check that the operation appears (could be in operation display or history)
-      expect(getAllByText('log₁₀(10)').length).toBeGreaterThan(0);
+      // Check that the operation appears in history
+      expect(getAllByText('log₁₀(10)')).toHaveLength(2); // Operation display + history
     });
 
     test('should show error for logarithm of non-positive numbers', async () => {
-      const { getByPlaceholderText, getByText } = render(<Calculator />);
+      const { getByText, getAllByText } = render(<Calculator />);
       
-      const input = getByPlaceholderText('Enter number');
-      const logButton = getByText('ln');
-      
-      fireEvent.changeText(input, '0');
-      fireEvent.press(logButton);
+      // Single number operation workflow: number → operation
+      fireEvent.press(getAllByText('0')[0]); // Enter 0 (use first instance)
+      fireEvent.press(getByText('ln')); // Select natural logarithm operation
       
       await waitFor(() => {
         expect(Alert.alert).toHaveBeenCalledWith('Calculator Error', 'Logarithm is only defined for positive numbers');

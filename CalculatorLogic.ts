@@ -121,6 +121,47 @@ export class CalculatorAPI {
       return rounded.toString();
     }
   }
+
+  // Input validation for unified input system
+  static isValidNumber(input: string): boolean {
+    if (input === '' || input === '.') return false;
+    
+    // Check for multiple decimal points
+    const decimalCount = (input.match(/\./g) || []).length;
+    if (decimalCount > 1) return false;
+    
+    // Check for invalid characters (only allow digits, decimal point, minus sign, and e/E for scientific notation)
+    if (!/^[-+]?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?$/.test(input)) return false;
+    
+    const num = parseFloat(input);
+    return !isNaN(num) && isFinite(num);
+  }
+
+  // Parse input string to number with error handling
+  static parseInput(input: string): number {
+    if (!this.isValidNumber(input)) {
+      throw new Error('Invalid number input');
+    }
+    return parseFloat(input);
+  }
+
+  // Get operation symbol for display
+  static getOperationSymbol(operation: string): string {
+    const symbols: { [key: string]: string } = {
+      'add': '+',
+      'subtract': '-',
+      'multiply': '×',
+      'divide': '÷',
+      'power': '^'
+    };
+    return symbols[operation] || operation;
+  }
+
+  // Create expression string for history
+  static createExpression(firstNumber: number, operation: string, secondNumber: number): string {
+    const symbol = this.getOperationSymbol(operation);
+    return `${firstNumber} ${symbol} ${secondNumber}`;
+  }
 }
 
 // History item interface
