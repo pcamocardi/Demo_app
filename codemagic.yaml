@@ -18,7 +18,6 @@ workflows:
         XCODE_SCHEME: "Demo_App"
         XCODE_PROJECT: "Demo_App/ios/Demo_App.xcodeproj"
       node: 20
-      npm_cache: true
     scripts:
       - name: Install dependencies
         script: |
@@ -42,6 +41,11 @@ workflows:
     artifacts:
       - Demo_App/ios/build/**/*.ipa
       - Demo_App/ios/build/**/*.app
+    integrations:
+      app_store_connect:
+        api_key: Encrypted(...)
+        key_id: Encrypted(...)
+        issuer_id: Encrypted(...)
     publishing:
       app_store_connect:
         auth: integration
@@ -66,7 +70,6 @@ workflows:
         XCODE_SCHEME: "Demo_app"
         XCODE_PROJECT: "ios/Demo_app.xcodeproj"
       node: 20
-      npm_cache: true
     scripts:
       - name: Install dependencies
         script: |
@@ -92,7 +95,6 @@ workflows:
     max_build_duration: 30
     environment:
       node: 20
-      npm_cache: true
     scripts:
       - name: Install dependencies
         script: |

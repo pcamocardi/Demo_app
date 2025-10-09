@@ -14,7 +14,6 @@ workflows:
         CERTIFICATE_PRIVATE_KEY: Encrypted(...)
         BUNDLE_ID: "com.pcamocardi.demoapp"
       node: 20
-      npm_cache: true
     scripts:
       - name: Install dependencies
         script: |
@@ -30,6 +29,11 @@ workflows:
           eas build --platform ios --profile production --non-interactive
     artifacts:
       - build/**/*.ipa
+    integrations:
+      app_store_connect:
+        api_key: Encrypted(...)
+        key_id: Encrypted(...)
+        issuer_id: Encrypted(...)
     publishing:
       app_store_connect:
         auth: integration
@@ -49,7 +53,6 @@ workflows:
     max_build_duration: 30
     environment:
       node: 20
-      npm_cache: true
     scripts:
       - name: Install dependencies
         script: |
@@ -79,7 +82,6 @@ workflows:
         EXPO_TOKEN: Encrypted(...)
         BUNDLE_ID: "com.pcamocardi.demoapp"
       node: 20
-      npm_cache: true
     scripts:
       - name: Install dependencies
         script: |
