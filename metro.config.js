@@ -7,6 +7,11 @@ const { mergeConfig } = require('@react-native/metro-config');
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const config = {
+  resolver: {
+    // Exclude the Demo_App subdirectory from Metro's module resolution
+    blockList: [/Demo_App\/.*/],
+  },
+};
 
 module.exports = mergeConfig(getDefaultConfig(__dirname), config);

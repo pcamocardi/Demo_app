@@ -1,0 +1,413 @@
+{
+  "software_requirements_specification": {
+    "metadata": {
+      "version": "1.0",
+      "date": "2025-01-07",
+      "author": "Pablo",
+      "project": "Demo_App - Advanced Calculator Application",
+      "document_type": "SRS"
+    },
+    "introduction": {
+      "purpose": "This document specifies the software requirements for the Calculator Demo App, a comprehensive React Native application that provides advanced mathematical calculation capabilities with a modern, user-friendly interface.",
+      "scope": "The Calculator Demo App is a cross-platform mobile application built with React Native that offers basic arithmetic operations, advanced mathematical functions, scientific calculator capabilities, expression evaluation with parentheses support, and modern dark-themed UI.",
+      "definitions": {
+        "SRS": "Software Requirements Specification",
+        "UI": "User Interface",
+        "UX": "User Experience",
+        "API": "Application Programming Interface",
+        "PEMDAS": "Parentheses, Exponents, Multiplication, Division, Addition, Subtraction",
+        "BODMAS": "Brackets, Orders, Division, Multiplication, Addition, Subtraction"
+      }
+    },
+    "overall_description": {
+      "product_perspective": "The Calculator Demo App is a standalone mobile application that operates independently without requiring external services or network connectivity. It is designed to run on both iOS and Android platforms using React Native framework.",
+      "product_functions": {
+        "core_functions": [
+          "Basic Arithmetic: Addition, subtraction, multiplication, division",
+          "Advanced Operations: Exponentiation, square root, absolute value",
+          "Scientific Functions: Trigonometric (sin, cos, tan), logarithmic (ln, log₁₀)",
+          "Special Functions: Factorial, cube, square",
+          "Expression Evaluation: Support for complex mathematical expressions with parentheses",
+          "Constants: Pi (π) integration",
+          "Sign Operations: Plus/minus toggle functionality"
+        ],
+        "user_interface_functions": [
+          "Display Management: Dual-row display (operation and result)",
+          "Input Handling: Touch-based button interaction",
+          "Error Management: Comprehensive error handling and user feedback",
+          "State Management: Calculator state persistence during operations"
+        ]
+      },
+      "user_characteristics": {
+        "primary_users": ["Students", "professionals", "engineers", "scientists"],
+        "technical_level": "Basic to intermediate mobile device users",
+        "accessibility": "Touch-friendly interface with clear visual feedback"
+      },
+      "constraints": [
+        "Platform: React Native (iOS and Android)",
+        "Performance: Real-time calculation response (< 100ms)",
+        "Memory: Efficient state management for complex expressions",
+        "UI/UX: Dark theme with consistent styling",
+        "Testing: Comprehensive unit test coverage (85+ tests)"
+      ]
+    },
+    "functional_requirements": {
+      "basic_arithmetic_operations": [
+        {
+          "id": "FR-001",
+          "description": "The system shall perform addition operations with two or more numbers"
+        },
+        {
+          "id": "FR-002",
+          "description": "The system shall perform subtraction operations with two or more numbers"
+        },
+        {
+          "id": "FR-003",
+          "description": "The system shall perform multiplication operations with two or more numbers"
+        },
+        {
+          "id": "FR-004",
+          "description": "The system shall perform division operations with two or more numbers"
+        },
+        {
+          "id": "FR-005",
+          "description": "The system shall handle decimal number inputs and calculations"
+        },
+        {
+          "id": "FR-006",
+          "description": "The system shall display results with appropriate precision"
+        }
+      ],
+      "advanced_mathematical_functions": [
+        {
+          "id": "FR-007",
+          "description": "The system shall calculate square roots of positive numbers"
+        },
+        {
+          "id": "FR-008",
+          "description": "The system shall calculate squares of numbers (x²)"
+        },
+        {
+          "id": "FR-009",
+          "description": "The system shall calculate cubes of numbers (x³)"
+        },
+        {
+          "id": "FR-010",
+          "description": "The system shall calculate absolute values of numbers"
+        },
+        {
+          "id": "FR-011",
+          "description": "The system shall calculate factorials of non-negative integers"
+        },
+        {
+          "id": "FR-012",
+          "description": "The system shall perform exponentiation operations (x^y)"
+        },
+        {
+          "id": "FR-013",
+          "description": "The system shall calculate exponential functions (10^x)"
+        }
+      ],
+      "scientific_functions": [
+        {
+          "id": "FR-014",
+          "description": "The system shall calculate sine, cosine, and tangent functions"
+        },
+        {
+          "id": "FR-015",
+          "description": "The system shall calculate natural logarithm (ln) of positive numbers"
+        },
+        {
+          "id": "FR-016",
+          "description": "The system shall calculate base-10 logarithm (log₁₀) of positive numbers"
+        },
+        {
+          "id": "FR-017",
+          "description": "The system shall integrate mathematical constants (π)"
+        }
+      ],
+      "expression_evaluation": [
+        {
+          "id": "FR-018",
+          "description": "The system shall evaluate mathematical expressions with parentheses"
+        },
+        {
+          "id": "FR-019",
+          "description": "The system shall support nested parentheses up to 10+ levels"
+        },
+        {
+          "id": "FR-020",
+          "description": "The system shall handle implicit multiplication (e.g., 2(3+4) → 2*(3+4))"
+        },
+        {
+          "id": "FR-021",
+          "description": "The system shall support adjacent parentheses (e.g., (2+3)(4+5))"
+        },
+        {
+          "id": "FR-022",
+          "description": "The system shall follow proper order of operations (PEMDAS/BODMAS)"
+        },
+        {
+          "id": "FR-023",
+          "description": "The system shall validate parentheses balance and report mismatched parentheses"
+        }
+      ],
+      "user_interface_operations": [
+        {
+          "id": "FR-024",
+          "description": "The system shall provide a clear, dual-row display (operation and result)"
+        },
+        {
+          "id": "FR-025",
+          "description": "The system shall support touch-based button interactions"
+        },
+        {
+          "id": "FR-026",
+          "description": "The system shall provide visual feedback for button presses"
+        },
+        {
+          "id": "FR-027",
+          "description": "The system shall support sign toggle functionality (+/-)"
+        },
+        {
+          "id": "FR-028",
+          "description": "The system shall provide clear/reset functionality"
+        },
+        {
+          "id": "FR-029",
+          "description": "The system shall display current operation status"
+        }
+      ],
+      "error_handling": [
+        {
+          "id": "FR-030",
+          "description": "The system shall detect and report mathematical errors (division by zero, negative square roots)"
+        },
+        {
+          "id": "FR-031",
+          "description": "The system shall validate input parameters for mathematical functions"
+        },
+        {
+          "id": "FR-032",
+          "description": "The system shall provide clear error messages to users"
+        },
+        {
+          "id": "FR-033",
+          "description": "The system shall allow recovery from error states"
+        },
+        {
+          "id": "FR-034",
+          "description": "The system shall handle invalid expressions gracefully"
+        }
+      ]
+    },
+    "non_functional_requirements": {
+      "performance_requirements": [
+        {
+          "id": "NFR-001",
+          "description": "Calculation response time shall be less than 100ms for standard operations"
+        },
+        {
+          "id": "NFR-002",
+          "description": "Complex expression evaluation shall complete within 500ms"
+        },
+        {
+          "id": "NFR-003",
+          "description": "Application startup time shall be less than 2 seconds"
+        },
+        {
+          "id": "NFR-004",
+          "description": "Memory usage shall remain under 50MB during normal operation"
+        }
+      ],
+      "usability_requirements": [
+        {
+          "id": "NFR-005",
+          "description": "The interface shall be intuitive for users with basic mobile device experience"
+        },
+        {
+          "id": "NFR-006",
+          "description": "Button sizes shall be appropriate for touch interaction (minimum 44px)"
+        },
+        {
+          "id": "NFR-007",
+          "description": "Text shall be clearly readable with appropriate contrast"
+        },
+        {
+          "id": "NFR-008",
+          "description": "The interface shall provide consistent visual feedback"
+        }
+      ],
+      "reliability_requirements": [
+        {
+          "id": "NFR-009",
+          "description": "The application shall handle edge cases without crashing"
+        },
+        {
+          "id": "NFR-010",
+          "description": "The application shall maintain state consistency during operations"
+        },
+        {
+          "id": "NFR-011",
+          "description": "The application shall recover gracefully from error conditions"
+        },
+        {
+          "id": "NFR-012",
+          "description": "The application shall provide accurate mathematical results"
+        }
+      ],
+      "compatibility_requirements": [
+        {
+          "id": "NFR-013",
+          "description": "The application shall run on iOS 12.0 and later"
+        },
+        {
+          "id": "NFR-014",
+          "description": "The application shall run on Android API level 21 and later"
+        },
+        {
+          "id": "NFR-015",
+          "description": "The application shall support both portrait and landscape orientations"
+        },
+        {
+          "id": "NFR-016",
+          "description": "The application shall adapt to different screen sizes"
+        }
+      ],
+      "security_requirements": [
+        {
+          "id": "NFR-017",
+          "description": "The application shall not store sensitive user data"
+        },
+        {
+          "id": "NFR-018",
+          "description": "The application shall not require network permissions"
+        },
+        {
+          "id": "NFR-019",
+          "description": "The application shall operate in offline mode"
+        }
+      ]
+    },
+    "interface_requirements": {
+      "user_interface_layout": [
+        {
+          "id": "UI-001",
+          "description": "Header section with application title and developer information"
+        },
+        {
+          "id": "UI-002",
+          "description": "Dual-row display area for operations and results"
+        },
+        {
+          "id": "UI-003",
+          "description": "Special operations section with mathematical functions"
+        },
+        {
+          "id": "UI-004",
+          "description": "Basic operations and number input section"
+        },
+        {
+          "id": "UI-005",
+          "description": "Consistent dark theme throughout the application"
+        }
+      ],
+      "button_layout_organization": [
+        {
+          "id": "UI-006",
+          "description": "Special operations arranged in three rows: Row 1: x², √, |x|, C; Row 2: x³, n!, log₁₀, exp; Row 3: sin, cos, tan, ln"
+        },
+        {
+          "id": "UI-007",
+          "description": "Basic operations and numbers arranged in five rows: Row 1: (, ), π, ÷; Row 2: 7, 8, 9, ×; Row 3: 4, 5, 6, -; Row 4: 1, 2, 3, +; Row 5: +/-, 0, ., ="
+        }
+      ],
+      "visual_design_requirements": [
+        {
+          "id": "UI-008",
+          "description": "Dark theme with consistent color scheme"
+        },
+        {
+          "id": "UI-009",
+          "description": "Rounded corners and modern button styling"
+        },
+        {
+          "id": "UI-010",
+          "description": "Appropriate font sizes and weights for readability"
+        },
+        {
+          "id": "UI-011",
+          "description": "Clear visual hierarchy and spacing"
+        },
+        {
+          "id": "UI-012",
+          "description": "Responsive design for different screen sizes"
+        }
+      ]
+    },
+    "system_features": {
+      "calculator_core_engine": "The application includes a comprehensive mathematical calculation engine that supports basic arithmetic operations with proper precedence, advanced mathematical functions with input validation, expression parsing and evaluation with recursive descent algorithm, and error handling and user feedback mechanisms.",
+      "expression_parser": "Advanced expression evaluation system featuring parentheses support with nesting validation, implicit multiplication handling, operator precedence enforcement, and syntax validation and error reporting.",
+      "user_interface_system": "Modern, responsive interface with touch-optimized button layout, real-time display updates, visual feedback for user interactions, and error state management and recovery.",
+      "state_management": "Comprehensive state management system including calculator state persistence, operation history tracking, error state handling, and input validation and sanitization."
+    },
+    "assumptions_dependencies": {
+      "assumptions": [
+        "Users have basic familiarity with mobile device touch interfaces",
+        "Users understand standard mathematical notation",
+        "The application will be used primarily for mathematical calculations",
+        "Users expect immediate response to input actions"
+      ],
+      "dependencies": [
+        "React Native framework (latest stable version)",
+        "Node.js runtime environment",
+        "iOS/Android development environments for building",
+        "Jest testing framework for unit testing",
+        "ESLint for code quality assurance"
+      ]
+    },
+    "acceptance_criteria": {
+      "functional_acceptance": [
+        "All mathematical operations produce accurate results",
+        "Expression evaluation handles complex nested expressions correctly",
+        "Error handling provides appropriate user feedback",
+        "User interface responds correctly to all touch interactions",
+        "All 85+ unit tests pass successfully"
+      ],
+      "non_functional_acceptance": [
+        "Application performance meets specified response time requirements",
+        "User interface is intuitive and accessible",
+        "Application operates reliably across supported platforms",
+        "Code quality meets established standards (linting passes)"
+      ],
+      "testing_requirements": [
+        "Unit test coverage for all core functionality",
+        "Integration testing for user interface components",
+        "Performance testing for calculation operations",
+        "Cross-platform compatibility testing"
+      ]
+    },
+    "future_enhancements": {
+      "potential_features": [
+        "History tracking and recall functionality",
+        "Customizable themes and layouts",
+        "Additional mathematical constants and functions",
+        "Export functionality for calculation results",
+        "Voice input capabilities",
+        "Advanced graphing and visualization features"
+      ],
+      "technical_improvements": [
+        "Enhanced error handling and recovery mechanisms",
+        "Performance optimizations for complex calculations",
+        "Accessibility improvements for users with disabilities",
+        "Internationalization support for multiple languages"
+      ]
+    },
+    "conclusion": "This Software Requirements Specification defines the comprehensive requirements for the Calculator Demo App, a sophisticated mathematical calculation application built with React Native. The application successfully implements advanced mathematical functionality while maintaining an intuitive user interface and robust error handling capabilities. The application meets all specified functional and non-functional requirements, providing users with a powerful, reliable, and user-friendly mathematical calculation tool suitable for educational, professional, and personal use.",
+    "document_status": {
+      "status": "Final",
+      "review_date": "2025-01-07",
+      "next_review": "As needed for future enhancements"
+    }
+  }
+}
