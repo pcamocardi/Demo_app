@@ -1,22 +1,12 @@
 workflows:
-  # iOS workflow for Expo Demo_App
-  expo-ios-workflow:
+  # Expo iOS Build (Simplified)
+  expo-ios-simple:
     name: Demo_App iOS Build
     max_build_duration: 60
     environment:
       vars:
-        # Expo configuration
         EXPO_TOKEN: Encrypted(...) # Add your Expo access token here
-        APP_STORE_CONNECT_ISSUER_ID: Encrypted(...) # Add your App Store Connect API key issuer ID
-        APP_STORE_CONNECT_KEY_IDENTIFIER: Encrypted(...) # Add your App Store Connect API key identifier
-        APP_STORE_CONNECT_PRIVATE_KEY: Encrypted(...) # Add your App Store Connect API key private key
-        CERTIFICATE_PRIVATE_KEY: Encrypted(...) # Add your iOS distribution certificate private key
-        APP_STORE_CONNECT_API_KEY_ID: Encrypted(...) # Add your App Store Connect API key ID
-        APP_STORE_CONNECT_API_ISSUER_ID: Encrypted(...) # Add your App Store Connect API key issuer ID
         BUNDLE_ID: "com.pcamocardi.demoapp"
-        XCODE_WORKSPACE: "Demo_App/ios/Demo_App.xcworkspace"
-        XCODE_SCHEME: "Demo_App"
-        XCODE_PROJECT: "Demo_App/ios/Demo_App.xcodeproj"
       node: 20
     scripts:
       - name: Install dependencies
@@ -26,32 +16,18 @@ workflows:
       - name: Install Expo CLI
         script: |
           npm install -g @expo/cli
-      - name: Configure Expo
+      - name: Login to Expo
         script: |
           cd Demo_App
-          expo login --non-interactive --username $EXPO_USERNAME --password $EXPO_PASSWORD
-      - name: Prebuild iOS
+          expo login --non-interactive --token $EXPO_TOKEN
+      - name: Build iOS with Expo
         script: |
           cd Demo_App
-          expo prebuild --platform ios --clear
-      - name: Install CocoaPods dependencies
-        script: |
-          cd Demo_App/ios
-          pod install
+          expo build:ios --non-interactive
     artifacts:
-      - Demo_App/ios/build/**/*.ipa
-      - Demo_App/ios/build/**/*.app
-    integrations:
-      app_store_connect:
-        api_key: Encrypted(...)
-        key_id: Encrypted(...)
-        issuer_id: Encrypted(...)
+      - Demo_App/build/**/*.ipa
+      - Demo_App/build/**/*.app
     publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
-        beta_groups:
-          - "Demo App Beta Testers"
       email:
         recipients:
           - pcamocardi@example.com # Replace with your email
@@ -59,8 +35,36 @@ workflows:
           success: true
           failure: true
 
-  # Alternative: React Native iOS workflow for main app
-  react-native-ios-workflow:
+  # Expo Web Build
+  expo-web-simple:
+    name: Demo_App Web Build
+    max_build_duration: 30
+    environment:
+      node: 20
+    scripts:
+      - name: Install dependencies
+        script: |
+          cd Demo_App
+          npm install
+      - name: Install Expo CLI
+        script: |
+          npm install -g @expo/cli
+      - name: Build web app
+        script: |
+          cd Demo_App
+          npx expo export --platform web
+    artifacts:
+      - Demo_App/dist/**/*
+    publishing:
+      email:
+        recipients:
+          - pcamocardi@example.com # Replace with your email
+        notify:
+          success: true
+          failure: true
+
+  # React Native iOS Build (Main App)
+  react-native-ios:
     name: Calculator App iOS Build
     max_build_duration: 60
     environment:
@@ -81,31 +85,6 @@ workflows:
     artifacts:
       - ios/build/**/*.ipa
       - ios/build/**/*.app
-    publishing:
-      email:
-        recipients:
-          - pcamocardi@example.com # Replace with your email
-        notify:
-          success: true
-          failure: true
-
-  # Web build workflow for Expo Demo_App
-  expo-web-workflow:
-    name: Demo_App Web Build
-    max_build_duration: 30
-    environment:
-      node: 20
-    scripts:
-      - name: Install dependencies
-        script: |
-          cd Demo_App
-          npm install
-      - name: Build web app
-        script: |
-          cd Demo_App
-          npx expo export --platform web
-    artifacts:
-      - Demo_App/dist/**/*
     publishing:
       email:
         recipients:
