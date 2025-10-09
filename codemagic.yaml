@@ -19,11 +19,11 @@ workflows:
       - name: Verify EAS authentication
         script: |
           cd Demo_App
-          eas whoami
+          eas whoami --token $EXPO_TOKEN
       - name: Build iOS with EAS
         script: |
           cd Demo_App
-          eas build --platform ios --profile development --non-interactive
+          eas build --platform ios --profile development --non-interactive --token $EXPO_TOKEN
     artifacts:
       - build/**/*.ipa
     publishing:

@@ -15,12 +15,12 @@ workflows:
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
-      - name: Login to EAS
+      - name: Verify EAS authentication
         script: |
-          eas login --non-interactive --token $EXPO_TOKEN
+          eas whoami --token $EXPO_TOKEN
       - name: Build Development version
         script: |
-          eas build --platform ios --profile development --non-interactive
+          eas build --platform ios --profile development --non-interactive --token $EXPO_TOKEN
     artifacts:
       - build/**/*.ipa
     publishing:
@@ -73,12 +73,12 @@ workflows:
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
-      - name: Login to EAS
+      - name: Verify EAS authentication
         script: |
-          eas login --non-interactive --token $EXPO_TOKEN
+          eas whoami --token $EXPO_TOKEN
       - name: Build Production version
         script: |
-          eas build --platform ios --profile production --non-interactive
+          eas build --platform ios --profile production --non-interactive --token $EXPO_TOKEN
     artifacts:
       - build/**/*.ipa
     publishing:
