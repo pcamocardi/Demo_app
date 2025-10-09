@@ -1,6 +1,6 @@
 workflows:
-  # Expo iOS Build (Simplified)
-  expo-ios-simple:
+  # Expo iOS Build with EAS
+  expo-ios-eas:
     name: Demo_App iOS Build
     max_build_duration: 60
     environment:
@@ -13,20 +13,19 @@ workflows:
         script: |
           cd Demo_App
           npm install
-      - name: Install Expo CLI
+      - name: Install EAS CLI
         script: |
-          npm install -g @expo/cli
-      - name: Login to Expo
-        script: |
-          cd Demo_App
-          expo login --non-interactive --token $EXPO_TOKEN
-      - name: Build iOS with Expo
+          npm install -g eas-cli
+      - name: Login to EAS
         script: |
           cd Demo_App
-          expo build:ios --non-interactive
+          eas login --non-interactive --token $EXPO_TOKEN
+      - name: Build iOS with EAS
+        script: |
+          cd Demo_App
+          eas build --platform ios --profile development --non-interactive
     artifacts:
-      - Demo_App/build/**/*.ipa
-      - Demo_App/build/**/*.app
+      - build/**/*.ipa
     publishing:
       email:
         recipients:
