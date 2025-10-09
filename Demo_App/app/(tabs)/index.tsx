@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  Platform,
 } from 'react-native';
 
 export default function HomeScreen() {
@@ -45,6 +46,7 @@ export default function HomeScreen() {
   };
 
   const handleNumberPress = (number: string) => {
+    console.log('Number pressed:', number); // Debug log
     if (justCompletedEquals) {
       setInputValue(number);
       setJustCompletedEquals(false);
@@ -111,6 +113,7 @@ export default function HomeScreen() {
   };
 
   const handleClear = () => {
+    console.log('Clear pressed'); // Debug log
     setInputValue('0');
     setOperation('');
     setFirstNumber(null);
@@ -124,7 +127,11 @@ export default function HomeScreen() {
   };
 
   const Button = ({ title, onPress, style, textStyle }: any) => (
-    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
+    <TouchableOpacity 
+      style={[styles.button, style]} 
+      onPress={onPress}
+      activeOpacity={0.7}
+    >
       <Text style={[styles.buttonText, textStyle]}>{title}</Text>
     </TouchableOpacity>
   );
@@ -208,7 +215,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1C1C1E',
-    paddingTop: 60,
+    paddingTop: Platform.OS === 'web' ? 20 : 60,
+    minHeight: Platform.OS === 'web' ? '100vh' : undefined,
   },
   header: {
     paddingHorizontal: 20,
@@ -219,11 +227,16 @@ const styles = StyleSheet.create({
     marginTop: 8,
     borderRadius: 12,
     backgroundColor: '#2C2C2E',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    ...(Platform.OS !== 'web' && {
+      elevation: 2,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+    }),
+    ...(Platform.OS === 'web' && {
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    }),
   },
   title: {
     fontSize: 20,
@@ -270,12 +283,20 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    height: 70,
+    height: Platform.OS === 'web' ? 60 : 70,
     marginHorizontal: 6,
-    borderRadius: 35,
+    borderRadius: Platform.OS === 'web' ? 8 : 35,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#2C2C2E',
+    cursor: Platform.OS === 'web' ? 'pointer' : 'default',
+    userSelect: Platform.OS === 'web' ? 'none' : 'auto',
+    ...(Platform.OS === 'web' && {
+      transition: 'all 0.2s ease',
+      ':hover': {
+        backgroundColor: '#3C3C3E',
+      },
+    }),
   },
   buttonText: {
     fontSize: 24,
