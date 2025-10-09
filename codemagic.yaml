@@ -16,14 +16,15 @@ workflows:
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
-      - name: Verify EAS authentication
+      - name: Set up EAS authentication and build
         script: |
           cd Demo_App
-          eas whoami --token $EXPO_TOKEN
-      - name: Build iOS with EAS
-        script: |
-          cd Demo_App
-          eas build --platform ios --profile development --non-interactive --token $EXPO_TOKEN
+          # Make sure EAS CLI uses your token
+          export EXPO_TOKEN=$EXPO_TOKEN
+          # Verify login
+          npx eas whoami
+          # Build iOS app
+          npx eas build -p ios --profile development --non-interactive
     artifacts:
       - build/**/*.ipa
     publishing:
