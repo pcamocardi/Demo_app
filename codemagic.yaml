@@ -16,10 +16,10 @@ workflows:
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
-      - name: Login to EAS
+      - name: Verify EAS authentication
         script: |
           cd Demo_App
-          eas login --non-interactive --token $EXPO_TOKEN
+          eas whoami
       - name: Build iOS with EAS
         script: |
           cd Demo_App
