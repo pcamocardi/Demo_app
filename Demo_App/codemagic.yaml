@@ -1,0 +1,104 @@
+workflows:
+  # Expo iOS Build with EAS
+  expo-ios-eas:
+    name: Demo_App iOS EAS Build
+    max_build_duration: 60
+    environment:
+      vars:
+        # Expo configuration
+        EXPO_TOKEN: Encrypted(...) # Add your Expo access token here
+        # Apple Developer credentials
+        APP_STORE_CONNECT_ISSUER_ID: Encrypted(...)
+        APP_STORE_CONNECT_KEY_IDENTIFIER: Encrypted(...)
+        APP_STORE_CONNECT_PRIVATE_KEY: Encrypted(...)
+        CERTIFICATE_PRIVATE_KEY: Encrypted(...)
+        BUNDLE_ID: "com.pcamocardi.demoapp"
+      node: 20
+      npm_cache: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Install EAS CLI
+        script: |
+          npm install -g eas-cli
+      - name: Login to EAS
+        script: |
+          eas login --non-interactive --token $EXPO_TOKEN
+      - name: Build iOS with EAS
+        script: |
+          eas build --platform ios --profile production --non-interactive
+    artifacts:
+      - build/**/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups:
+          - "Demo App Beta Testers"
+      email:
+        recipients:
+          - pcamocardi@example.com # Replace with your email
+        notify:
+          success: true
+          failure: true
+
+  # Expo Web Build
+  expo-web:
+    name: Demo_App Web Build
+    max_build_duration: 30
+    environment:
+      node: 20
+      npm_cache: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Install Expo CLI
+        script: |
+          npm install -g @expo/cli
+      - name: Build web app
+        script: |
+          npx expo export --platform web
+    artifacts:
+      - dist/**/*
+    publishing:
+      email:
+        recipients:
+          - pcamocardi@example.com # Replace with your email
+        notify:
+          success: true
+          failure: true
+
+  # Expo Development Build
+  expo-development:
+    name: Demo_App Development Build
+    max_build_duration: 45
+    environment:
+      vars:
+        EXPO_TOKEN: Encrypted(...)
+        BUNDLE_ID: "com.pcamocardi.demoapp"
+      node: 20
+      npm_cache: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Install EAS CLI
+        script: |
+          npm install -g eas-cli
+      - name: Login to EAS
+        script: |
+          eas login --non-interactive --token $EXPO_TOKEN
+      - name: Build Development version
+        script: |
+          eas build --platform ios --profile development --non-interactive
+    artifacts:
+      - build/**/*.ipa
+    publishing:
+      email:
+        recipients:
+          - pcamocardi@example.com # Replace with your email
+        notify:
+          success: true
+          failure: true
