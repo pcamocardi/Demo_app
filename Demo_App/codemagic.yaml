@@ -5,7 +5,7 @@ workflows:
     max_build_duration: 45
     environment:
       vars:
-        EAS_TOKEN: $EAS_TOKEN # Add this as environment variable in Codemagic dashboard
+        EXPO_TOKEN: $EXPO_TOKEN # Add this as environment variable in Codemagic dashboard (use your EAS token that starts with kW4v...)
         BUNDLE_ID: "com.pcamocardi.demoapp"
       node: 20
     scripts:
@@ -18,7 +18,7 @@ workflows:
       - name: Set up EAS authentication and build
         script: |
           # Make sure EAS CLI uses your token
-          export EAS_TOKEN=$EAS_TOKEN
+          export EXPO_TOKEN=$EXPO_TOKEN
           # Verify login
           npx eas whoami
           # Build iOS app
@@ -65,7 +65,7 @@ workflows:
     max_build_duration: 60
     environment:
       vars:
-        EAS_TOKEN: $EAS_TOKEN # Add this as environment variable in Codemagic dashboard
+        EXPO_TOKEN: $EXPO_TOKEN # Add this as environment variable in Codemagic dashboard (use your EAS token that starts with kW4v...)
         BUNDLE_ID: "com.pcamocardi.demoapp"
       node: 20
     scripts:
@@ -78,7 +78,7 @@ workflows:
       - name: Set up EAS authentication and build
         script: |
           # Make sure EAS CLI uses your token
-          export EAS_TOKEN=$EAS_TOKEN
+          export EXPO_TOKEN=$EXPO_TOKEN
           # Verify login
           npx eas whoami
           # Build iOS app
