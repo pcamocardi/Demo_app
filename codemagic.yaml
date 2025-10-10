@@ -25,8 +25,8 @@ workflows:
           export EXPO_TOKEN=$EXPO_TOKEN
           # Verify login
           npx eas whoami
-          # Build iOS app (credentials will be managed automatically)
-          npx eas build -p ios --profile development --non-interactive
+          # Build iOS app (using preview profile to avoid credential setup)
+          npx eas build -p ios --profile preview --non-interactive
     artifacts:
       - build/**/*.ipa
     publishing:
