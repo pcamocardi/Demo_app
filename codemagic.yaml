@@ -14,7 +14,7 @@ workflows:
         script: |
           cd Demo_App
           npm install
-          npm install expo-dev-client
+          # npm install expo-dev-client  # Removed for simpler build
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
@@ -25,8 +25,8 @@ workflows:
           export EXPO_TOKEN=$EXPO_TOKEN
           # Verify login
           npx eas whoami
-          # Build iOS app (using preview profile to avoid credential setup)
-          npx eas build -p ios --profile preview --non-interactive
+          # Build iOS app (simplified without dev client)
+          npx eas build -p ios --profile development --non-interactive
     artifacts:
       - build/**/*.ipa
     publishing:
