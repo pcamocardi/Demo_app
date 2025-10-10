@@ -25,6 +25,8 @@ workflows:
           export EXPO_TOKEN=$EXPO_TOKEN
           # Verify login
           npx eas whoami
+          # Configure credentials (let EAS manage them)
+          npx eas credentials -p ios --profile development --non-interactive
           # Build iOS app
           npx eas build -p ios --profile development --non-interactive
     artifacts:
