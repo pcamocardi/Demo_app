@@ -13,6 +13,7 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
+          npm install expo-dev-client
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
@@ -44,6 +45,7 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
+          npm install expo-dev-client
       - name: Install Expo CLI
         script: |
           npm install -g @expo/cli
@@ -74,6 +76,7 @@ workflows:
       - name: Install dependencies
         script: |
           npm install
+          npm install expo-dev-client
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli

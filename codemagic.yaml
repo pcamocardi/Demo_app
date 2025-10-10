@@ -14,6 +14,7 @@ workflows:
         script: |
           cd Demo_App
           npm install
+          npm install expo-dev-client
       - name: Install EAS CLI
         script: |
           npm install -g eas-cli
