@@ -13,9 +13,9 @@
    - Click **"+ Add variable"**
    - Fill in the details:
      - **Variable name**: `EXPO_TOKEN`
-     - **Variable value**: `kW4v...` (your actual EAS token)
+     - **Variable value**: `r_m8U...` (your actual EAS token)
      - **Secure**: ✅ **Check this box** (important!)
-     - **Group**: `expo` (optional, but recommended for organization)
+     - **Group**: `expo` (select the existing expo group)
 
 3. **Save the Variable**
    - Click **"Save"**
@@ -23,14 +23,16 @@
 
 ### Step 2: Verify Your codemagic.yaml Configuration
 
-Your `codemagic.yaml` should already be configured correctly:
+Your `codemagic.yaml` is now configured to use groups:
 
 ```yaml
 workflows:
   expo-ios-eas:
     environment:
+      groups:
+        - expo  # This imports all variables from the expo group
       vars:
-        EXPO_TOKEN: $EXPO_TOKEN # This references the variable you just created
+        BUNDLE_ID: "com.pcamocardi.demoapp"
 ```
 
 ### Step 3: Start Build
@@ -50,15 +52,15 @@ workflows:
    - No spaces or extra characters
 
 2. **Check Token Value**
-   - Make sure you copied the complete token starting with `kW4v...`
+   - Make sure you copied the complete token starting with `r_m8U...`
    - No extra spaces at the beginning or end
 
 3. **Check Secure Flag**
    - Make sure the "Secure" checkbox is checked
    - This encrypts the token value
 
-4. **Verify Group (Optional)**
-   - If you created a group called `expo`, make sure it's properly configured
+4. **Verify Group**
+   - Make sure the group `expo` exists and contains your `EXPO_TOKEN` variable
 
 ## 📋 Expected Build Flow
 
@@ -72,7 +74,7 @@ Once properly configured, your build should:
 
 ## 🚨 Important Notes
 
-- **Token Format**: Your token starts with `kW4v...` (this is correct for EAS tokens)
+- **Token Format**: Your token starts with `r_m8U...` (this is correct for EAS tokens)
 - **Variable Name**: Must be `EXPO_TOKEN` (EAS CLI requirement)
 - **Security**: Always mark as "Secure" to encrypt the token
 - **Access**: Use `$EXPO_TOKEN` in codemagic.yaml to reference the variable
